@@ -7,7 +7,7 @@ use ext_php_rs::types::{ZendHashTable, ZendObject, Zval};
 use json5;
 use serde_json::Value;
 
-fn convert(json5: Value) -> Zval
+fn convert(json5: Value, associative: bool) -> Zval
 {
     let mut zv = Zval::new();
 
@@ -31,18 +31,29 @@ fn convert(json5: Value) -> Zval
             );
 
             for val in arr.into_iter() {
-                ht.push(convert(val)).unwrap();
+                ht.push(convert(val, associative)).unwrap();
             }
             zv.set_hashtable(ht);
         }
         Value::Object(_o) => {
-            let mut obj = ZendObject::new_stdclass();
+            if associative {
+                let mut ht = ZendHashTable::new();
 
-            for (key, val) in _o {
-                let _ = obj.set_property(&key, convert(val));
+                for (key, val) in _o {
+                    ht.insert(&key, convert(val, associative)).unwrap();
+                }
+
+                zv.set_hashtable(ht);
             }
+            else {
+                let mut obj = ZendObject::new_stdclass();
 
-            zv.set_object(&mut obj);
+                for (key, val) in _o {
+                    let _ = obj.set_property(&key, convert(val, associative));
+                }
+
+                zv.set_object(&mut obj);
+            }
         }
     }
 
@@ -55,10 +66,10 @@ fn convert(json5: Value) -> Zval
 ///
 /// @return array parsed JSON5
 #[php_function]
-pub fn json5_decode(json5: String) -> Zval {
+pub fn json5_decode(json5: String, associative: Option<bool>) -> Zval {
     let json5_val: Value = json5::from_str::<Value>(&json5).unwrap();
 
-    return convert(json5_val);
+    return convert(json5_val, associative.unwrap_or(false));
 }
 
 #[php_module]
