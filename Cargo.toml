@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Copyright 2023 Heinz Wiesinger, Amsterdam, The Netherlands
+# SPDX-License-Identifier: CC0-1.0
+
 [package]
 name = "php-json5"
 version = "0.1.0"

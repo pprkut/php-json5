@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Copyright 2023 Heinz Wiesinger, Amsterdam, The Netherlands
+# SPDX-License-Identifier: CC0-1.0
+
 [target.'cfg(not(target_os = "windows"))']
 rustflags = ["-C", "link-arg=-Wl,-undefined,dynamic_lookup"]
 

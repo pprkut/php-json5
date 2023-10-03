@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright 2023 Heinz Wiesinger, Amsterdam, The Netherlands
+// SPDX-License-Identifier: MIT
+
 #![cfg_attr(windows, feature(abi_vectorcall))]
 use ext_php_rs::prelude::*;
 use ext_php_rs::types::{ZendHashTable, ZendObject, Zval};

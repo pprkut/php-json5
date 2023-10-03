@@ -1,5 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/kate,kdevelop4,rust,rust-analyzer
 # Edit at https://www.toptal.com/developers/gitignore?templates=kate,kdevelop4,rust,rust-analyzer
+#
+# SPDX-FileCopyrightText: Copyright 2023 Heinz Wiesinger, Amsterdam, The Netherlands
+# SPDX-License-Identifier: CC0-1.0
 
 ### Kate ###
 # Swap Files #

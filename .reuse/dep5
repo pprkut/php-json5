@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: php-json5
+Upstream-Contact: Heinz Wiesinger <pprkut@liwjatan.org>
+Source: https://github.com/pprkut/php-json5
+
+Files: README.md
+Copyright: 2023 Heinz Wiesinger, Amsterdam, The Netherlands
+License: CC0-1.0
