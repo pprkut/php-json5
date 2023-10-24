@@ -4,16 +4,17 @@
 #![cfg_attr(windows, feature(abi_vectorcall))]
 use ext_php_rs::prelude::*;
 use ext_php_rs::types::{ZendHashTable, ZendObject, Zval};
+use ext_php_rs::exception::PhpResult;
 use json5;
 use serde_json::Value;
 
-fn convert(json5: Value, associative: bool) -> Zval
+fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
 {
     let mut zv = Zval::new();
 
     match json5 {
         Value::String(s) => {
-            zv.set_string(&s, false).unwrap();
+            zv.set_string(&s, false).map_err(|_| "String value could not be mapped")?;
         },
         Value::Null => zv.set_null(),
         Value::Bool(b) => zv.set_bool(b),
@@ -27,11 +28,11 @@ fn convert(json5: Value, associative: bool) -> Zval
         },
         Value::Array(arr) => {
             let mut ht = ZendHashTable::with_capacity(
-                arr.len().try_into().unwrap(),
+                arr.len().try_into().map_err(|_| "JSON5 array too big")?,
             );
 
             for val in arr.into_iter() {
-                ht.push(convert(val, associative)).unwrap();
+                ht.push(convert(val, associative)).map_err(|_| "Array value could not be mapped")?;
             }
             zv.set_hashtable(ht);
         }
@@ -40,7 +41,7 @@ fn convert(json5: Value, associative: bool) -> Zval
                 let mut ht = ZendHashTable::new();
 
                 for (key, val) in _o {
-                    ht.insert(&key, convert(val, associative)).unwrap();
+                    ht.insert(&key, convert(val, associative)).map_err(|_| "Object value could not be mapped to associative array")?;
                 }
 
                 zv.set_hashtable(ht);
@@ -57,7 +58,7 @@ fn convert(json5: Value, associative: bool) -> Zval
         }
     }
 
-    return zv;
+    return Ok(zv);
 }
 
 /// Parses and returns a hash-map array of JSON5 to PHP
@@ -66,8 +67,8 @@ fn convert(json5: Value, associative: bool) -> Zval
 ///
 /// @return array parsed JSON5
 #[php_function]
-pub fn json5_decode(json5: String, associative: Option<bool>) -> Zval {
-    let json5_val: Value = json5::from_str::<Value>(&json5).unwrap();
+pub fn json5_decode(json5: String, associative: Option<bool>) -> PhpResult<Zval> {
+    let json5_val: Value = json5::from_str::<Value>(&json5).map_err(|_| "Syntax error")?;
 
     return convert(json5_val, associative.unwrap_or(false));
 }
