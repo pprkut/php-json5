@@ -61,11 +61,14 @@ fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
     return Ok(zv);
 }
 
-/// Parses and returns a hash-map array of JSON5 to PHP
+/// Decodes a JSON5 string
 ///
-/// @param string $source JSON5 source file
+/// @param string    $json5       The JSON5 string being decoded.
+/// @param bool|null $associative When <b>TRUE</b>, returned objects will be converted into associative arrays.
 ///
-/// @return array parsed JSON5
+/// @return mixed The value encoded in JSON5 in appropriate PHP type. Values true, false and null (case-insensitive)
+///               are returned as <b>TRUE</b>, <b>FALSE</b> and <b>NULL</b> respectively. <b>NULL<b> is returned if
+///               the JSON5 cannot be decoded.
 #[php_function]
 pub fn json5_decode(json5: String, associative: Option<bool>) -> PhpResult<Zval> {
     let json5_val: Value = json5::from_str::<Value>(&json5).map_err(|_| "Syntax error")?;
