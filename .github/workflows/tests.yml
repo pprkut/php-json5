@@ -1,0 +1,13 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: swatinem/rust-cache@v2
+      - name: Remove conflicting llvm packages
+        run: sudo apt remove libclang1-13 llvm-13 libclang1-15 llvm-15
+      - name: Build
+        run: cargo build --verbose
