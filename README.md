@@ -54,3 +54,7 @@ array(6) {
   }
 }
 ```
+
+## Differences with `json_decode()`
+
+- After decoding, object keys will be sorted alphabetically
