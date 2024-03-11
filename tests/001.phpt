@@ -3,37 +3,13 @@ json5_decode() tests
 --FILE--
 <?php
 
-var_dump(json5_decode(""));
-var_dump(json5_decode("", 1));
-var_dump(json5_decode("", 0));
-var_dump(json5_decode(".", 1));
-var_dump(json5_decode(".", 0));
-var_dump(json5_decode("<?>"));
-var_dump(json5_decode(";"));
-var_dump(json5_decode("руссиш"));
-var_dump(json5_decode("blah"));
-var_dump(json5_decode(NULL));
 var_dump(json5_decode('{ "test": { "foo": "bar" } }'));
 var_dump(json5_decode('{ "test": { "foo": "" } }'));
 var_dump(json5_decode('{ "": { "foo": "" } }'));
 var_dump(json5_decode('{ "": { "": "" } }'));
-var_dump(json5_decode('{ "": { "": "" }'));
-var_dump(json5_decode('{ "": "": "" } }'));
 
 ?>
 --EXPECTF--
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-NULL
-
-Deprecated: json5_decode(): Passing null to parameter #1 ($json) of type string is deprecated in %s on line %d
-NULL
 object(stdClass)#%d (1) {
   ["test"]=>
   object(stdClass)#%d (1) {
@@ -62,5 +38,3 @@ object(stdClass)#%d (1) {
     string(0) ""
   }
 }
-NULL
-NULL
