@@ -112,57 +112,57 @@ array(5) {
 }
 -- Iteration 16 --
 object(stdClass)#%d (5) {
-  ["myBool"]=>
-  bool(true)
-  ["myFloat"]=>
-  float(123.45)
   ["myInt"]=>
   int(99)
+  ["myFloat"]=>
+  float(123.45)
   ["myNull"]=>
   NULL
+  ["myBool"]=>
+  bool(true)
   ["myString"]=>
   string(11) "Hello World"
 }
 array(5) {
-  ["myBool"]=>
-  bool(true)
-  ["myFloat"]=>
-  float(123.45)
   ["myInt"]=>
   int(99)
+  ["myFloat"]=>
+  float(123.45)
   ["myNull"]=>
   NULL
+  ["myBool"]=>
+  bool(true)
   ["myString"]=>
   string(11) "Hello World"
 }
 -- Iteration 17 --
 object(stdClass)#%d (6) {
-  ["April"]=>
-  int(30)
+  ["Jan"]=>
+  int(31)
   ["Feb"]=>
   int(29)
-  ["Jan"]=>
+  ["Mar"]=>
+  int(31)
+  ["April"]=>
+  int(30)
+  ["May"]=>
   int(31)
   ["June"]=>
   int(30)
-  ["Mar"]=>
-  int(31)
-  ["May"]=>
-  int(31)
 }
 array(6) {
-  ["April"]=>
-  int(30)
+  ["Jan"]=>
+  int(31)
   ["Feb"]=>
   int(29)
-  ["Jan"]=>
+  ["Mar"]=>
+  int(31)
+  ["April"]=>
+  int(30)
+  ["May"]=>
   int(31)
   ["June"]=>
   int(30)
-  ["Mar"]=>
-  int(31)
-  ["May"]=>
-  int(31)
 }
 -- Iteration 18 --
 string(0) ""
