@@ -57,4 +57,5 @@ array(6) {
 
 ## Differences with `json_decode()`
 
-- After decoding, object keys will be sorted alphabetically
+- Numbers that don't fit into a 64-bit integer or a finite float result in an error instead of being
+  converted to a float (or `INF`)

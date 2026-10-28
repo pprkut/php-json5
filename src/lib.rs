@@ -41,7 +41,13 @@ fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
                 let mut ht = ZendHashTable::new();
 
                 for (key, val) in _o {
-                    ht.insert(&key, convert(val, associative)).map_err(|_| "Object value could not be mapped to associative array")?;
+                    // Like json_decode(), store canonical integer strings as integer keys
+                    match key.parse::<i64>() {
+                        Ok(index) if index.to_string() == key => {
+                            ht.insert_at_index(index as u64, convert(val, associative))
+                        },
+                        _ => ht.insert(&key, convert(val, associative)),
+                    }.map_err(|_| "Object value could not be mapped to associative array")?;
                 }
 
                 zv.set_hashtable(ht);
