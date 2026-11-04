@@ -5,16 +5,16 @@ Test calling json5_decode() with NULL
 
 try {
   var_dump(json5_decode(NULL));
-} catch (Exception $e) {
+} catch (TypeError $e) {
   var_dump($e);
 }
 
 ?>
 --EXPECTF--
-object(Exception)#1 (7) {
+object(TypeError)#1 (7) {
   ["message":protected]=>
   string(41) "Invalid value given for argument `json5`."
-  ["string":"Exception":private]=>
+  ["string":"Error":private]=>
   string(0) ""
   ["code":protected]=>
   int(0)
@@ -22,7 +22,7 @@ object(Exception)#1 (7) {
   string(%d) "%s"
   ["line":protected]=>
   int(%d)
-  ["trace":"Exception":private]=>
+  ["trace":"Error":private]=>
   array(1) {
     [0]=>
     array(4) {
@@ -39,6 +39,6 @@ object(Exception)#1 (7) {
       }
     }
   }
-  ["previous":"Exception":private]=>
+  ["previous":"Error":private]=>
   NULL
 }

@@ -5,8 +5,23 @@
 use ext_php_rs::prelude::*;
 use ext_php_rs::types::{ZendHashTable, ZendObject, Zval};
 use ext_php_rs::exception::PhpResult;
+use ext_php_rs::convert::FromZval;
+use ext_php_rs::flags::DataType;
 use json5;
 use serde_json::Value;
+
+/// A bool argument that accepts any scalar, like a bool parameter in PHP's weak mode
+pub struct WeakBool(bool);
+
+impl<'a> FromZval<'a> for WeakBool {
+    const TYPE: DataType = DataType::Bool;
+
+    fn from_zval(zval: &'a Zval) -> Option<Self> {
+        let zval = zval.dereference();
+
+        zval.is_scalar().then(|| WeakBool(zval.coerce_to_bool()))
+    }
+}
 
 fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
 {
@@ -41,7 +56,7 @@ fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
                 let mut ht = ZendHashTable::new();
 
                 for (key, val) in _o {
-                    ht.insert(&key, convert(val, associative)).map_err(|_| "Object value could not be mapped to associative array")?;
+                    ht.insert(key.as_str(), convert(val, associative)).map_err(|_| "Object value could not be mapped to associative array")?;
                 }
 
                 zv.set_hashtable(ht);
@@ -70,13 +85,14 @@ fn convert(json5: Value, associative: bool) -> PhpResult<Zval>
 ///               are returned as <b>TRUE</b>, <b>FALSE</b> and <b>NULL</b> respectively. <b>NULL<b> is returned if
 ///               the JSON5 cannot be decoded.
 #[php_function]
-pub fn json5_decode(json5: String, associative: Option<bool>) -> PhpResult<Zval> {
+#[php(name = "json5_decode")]
+pub fn json5_decode(json5: String, associative: Option<WeakBool>) -> PhpResult<Zval> {
     let json5_val: Value = json5::from_str::<Value>(&json5).map_err(|_| "Syntax error")?;
 
-    return convert(json5_val, associative.unwrap_or(false));
+    return convert(json5_val, associative.map_or(false, |b| b.0));
 }
 
 #[php_module]
 pub fn get_module(module: ModuleBuilder) -> ModuleBuilder {
-    module
+    module.function(wrap_function!(json5_decode))
 }
